@@ -1,0 +1,5 @@
+
+User-agent: *
+Disallow:
+
+Sitemap: https://family-love-haven.com/sitemap.xml

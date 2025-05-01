@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-poppins overflow-x-hidden text-white min-h-screen;
+}
