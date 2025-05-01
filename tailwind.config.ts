@@ -4,9 +4,20 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        poppins: ['Poppins', 'sans-serif'],
+        sans: ['Open Sans', 'sans-serif'],
       },
-      colors: {},
+      colors: {
+        primary: {
+          DEFAULT: '#2196F3',
+        },
+        secondary: {
+          DEFAULT: '#4A4A4A',
+          additional: '#A0B0B9'
+        },
+        light: {
+          DEFAULT: '#F3F7FA',
+        }
+      },
     },
   },
 }
