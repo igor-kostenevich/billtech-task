@@ -42,7 +42,7 @@ watch([() => store.selectedStops, () => store.sortMode], () => {
 
       <button
         v-if="store.visibleTickets.length < store.filteredTickets.length"
-        class="bg-primary text-white px-5 py-[15px] rounded self-center uppercase text-xs font-semibold leading-5 w-full hover:bg-primary/80 transition-colors duration-300"
+        class="bg-primary text-white px-5 py-[15px] rounded self-center uppercase text-xs font-semibold leading-5 w-full hover:bg-primary/80 transition-colors duration-300 outline-none ring-0"
         @click="store.showMore()"
       >
         Завантажити ще 5 квитків

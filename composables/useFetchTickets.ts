@@ -16,6 +16,7 @@ export const useFetchTickets = () => {
 
     let stop = false
     store.isFetchingMore = true
+    let consecutiveErrors = 0
 
     while (!stop) {
       try {
@@ -24,22 +25,32 @@ export const useFetchTickets = () => {
           { query: { searchId: store.searchId } }
         )
 
-        const withId = res.tickets.map(t => ({
+        const tickets = res.tickets.map(t => ({
           ...t,
           id: crypto.randomUUID(),
         }))
 
-        store.addTickets(withId)
-        store.totalLoaded += withId.length
+        store.addTickets(tickets)
+        store.totalLoaded += tickets.length
+
         stop = res.stop
+        consecutiveErrors = 0
       } catch (err: any) {
-        if (err?.response?.status === 500) {
-          await new Promise(r => setTimeout(r, 1000))
+        const status = err?.response?.status
+        if (status === 500 || status === 502) {
+          consecutiveErrors++
+
+          if (consecutiveErrors >= 3) {
+            store.error = 'Занадто багато помилок. Спробуйте пізніше.'
+            break
+          }
+
+          await new Promise(resolve => setTimeout(resolve, 1000))
           continue
-        } else {
-          store.error = 'Помилка завантаження квитків. Будь ласка, спробуйте ще раз.'
-          break
         }
+
+        store.error = 'Невідома помилка при завантаженні квитків.'
+        break
       }
     }
 
@@ -63,6 +74,6 @@ export const useFetchTickets = () => {
 
   return {
     fetchTickets,
-    fetchAllTickets
+    fetchAllTickets,
   }
 }
