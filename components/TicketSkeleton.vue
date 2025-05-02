@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full p-5 pt-6 bg-white rounded-[5px] shadow-sm animate-pulse space-y-5 min-h-[194px]">
+  <div class="w-full p-5 pt-6 bg-white rounded-[5px] shadow-lg animate-pulse space-y-5 min-h-[194px]">
     <div class="flex justify-between items-center">
       <div class="h-5 w-24 bg-gray-300 shimmer rounded"></div>
       <div class="h-6 w-16 bg-gray-300 shimmer rounded"></div>

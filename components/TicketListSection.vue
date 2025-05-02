@@ -3,25 +3,26 @@ const store = useTicketsStore()
 const { fetchTickets } = useFetchTickets()
 const { filterByStops } = useTicketFilter()
 const { sortBy } = useTicketSort()
+const { debounce } = useHelpers()
 
-onMounted(async () => {
-  await fetchTickets()
-
-  const filtered = filterByStops(store.allTickets, store.selectedStops)
-  const sorted = sortBy(filtered, store.sortMode)
-  store.applyProcessed(sorted)
+onMounted(() => {
+  fetchTickets()
 })
 
-watch([() => store.selectedStops, () => store.sortMode], () => {
-  const filtered = filterByStops(store.allTickets, store.selectedStops)
-  const sorted = sortBy(filtered, store.sortMode)
-  store.applyProcessed(sorted)
-})
+watch(
+  [() => store.allTickets, () => store.selectedStops, () => store.sortMode],
+  () => {
+    const filtered = filterByStops(store.allTickets, store.selectedStops)
+    const sorted = sortBy(filtered, store.sortMode)
+    store.applyProcessed(sorted)
+  },
+  { deep: true }
+)
 </script>
 
 <template>
   <section class="flex flex-col gap-4">
-    <template v-if="store.loading">
+    <template v-if="store.loading && !store.visibleTickets.length">
       <TicketSkeleton v-for="i in 5" :key="i" />
     </template>
 
@@ -34,11 +35,17 @@ watch([() => store.selectedStops, () => store.sortMode], () => {
     </template>
 
     <template v-else>
-      <TicketCard
+      <Transition
         v-for="ticket in store.visibleTickets"
         :key="ticket.id"
-        :ticket="ticket"
-      />
+        name="fade"
+        appear
+      >
+        <TicketCard
+          :ticket="ticket"
+          class="relative"
+        />
+      </Transition>
 
       <button
         v-if="store.visibleTickets.length < store.filteredTickets.length"
@@ -51,5 +58,20 @@ watch([() => store.selectedStops, () => store.sortMode], () => {
   </section>
 </template>
 
+<style>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease-in-out;
+}
 
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+</style>
 

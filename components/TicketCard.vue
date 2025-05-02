@@ -20,7 +20,7 @@
       <img :src="carrierLogoUrl" :alt="ticket.carrier" />
     </div>
 
-    <div class="flex justify-between gap-2 mb-2.5">
+    <div class="grid grid-cols-3 justify-between gap-5 mb-2.5">
       <div>
         <p class="text-xs text-secondary-additional uppercase leading-[18px] tracking-wider font-semibold">
           {{ segmentTo.origin }} – {{ segmentTo.destination }}
@@ -47,7 +47,7 @@
       </div>
     </div>
 
-    <div class="flex justify-between gap-2">
+    <div class="grid grid-cols-3 justify-between gap-5">
       <div>
         <p class="text-xs text-secondary-additional uppercase leading-[18px] tracking-wider font-semibold">
           {{ segmentBack.origin }} – {{ segmentBack.destination }}

@@ -44,11 +44,21 @@ export const useHelpers = () => {
     })
   }
 
+  const debounce = <T extends (...args: any[]) => void>(fn: T, delay = 200): (...args: Parameters<T>) => void => {
+    let timeout: ReturnType<typeof setTimeout> | null = null
+
+    return (...args: Parameters<T>) => {
+      if (timeout) clearTimeout(timeout)
+      timeout = setTimeout(() => fn(...args), delay)
+    }
+  }
+
   return {
     formatTimeRange,
     formatDate,
     formatDuration,
     formatStops,
-    formatPrice
+    formatPrice,
+    debounce,
   }
 }

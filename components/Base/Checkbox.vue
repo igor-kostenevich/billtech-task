@@ -39,6 +39,7 @@ const toggle = () => {
 
     <div
       class="w-5 h-5 border rounded-sm flex items-center justify-center"
+      role="checkbox"
       :class="[modelValue ? 'border-primary' : 'border-[#9ABBCE]']"
     >
       <svg
