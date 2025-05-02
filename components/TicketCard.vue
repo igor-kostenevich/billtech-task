@@ -12,7 +12,7 @@
 </script>
 
 <template>
-  <div class="w-full p-5 pt-6 bg-white rounded-[5px] shadow-sm">
+  <div class="w-full p-5 pt-6 bg-white rounded-[5px] shadow-lg">
     <div class="flex justify-between mb-5 items-center">
       <span class="text-primary text-2xl leading-6 font-semibold">
         {{ formatPrice(ticket.price) }}

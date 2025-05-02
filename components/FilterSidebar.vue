@@ -35,14 +35,15 @@ watch(selected, (newVal) => {
 </script>
 
 <template>
-  <aside class="bg-white rounded-[5px] p-5 w-full max-w-[232px] shadow-sm">
-    <h2 class="mb-5 font-semibold text-xs text-secondary uppercase">Кількість пересадок</h2>
+  <aside class="bg-white rounded-[5px] pt-5 pb-2.5 w-full max-w-[232px] shadow-lg">
+    <h2 class="mb-2.5 px-5 font-semibold text-xs text-secondary uppercase">Кількість пересадок</h2>
 
-    <div class="flex flex-col gap-2.5">
+    <div class="flex flex-col">
       <BaseCheckbox
         v-for="opt in options"
         :key="String(opt.value)"
         :label="opt.label"
+        class="px-5 py-2.5 cursor-pointer hover:bg-light-secondary transition-colors"
         :model-value="opt.value === 'all'
           ? selected.length === 4
           : selected.includes(opt.value as number)"

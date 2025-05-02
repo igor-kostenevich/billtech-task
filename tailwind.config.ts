@@ -6,6 +6,9 @@ export default {
       fontFamily: {
         sans: ['Open Sans', 'sans-serif'],
       },
+      boxShadow: {
+        lg: '0px 2px 8px 0px rgba(0, 0, 0, 0.1)',
+      },
       colors: {
         primary: {
           DEFAULT: '#2196F3',
@@ -16,6 +19,7 @@ export default {
         },
         light: {
           DEFAULT: '#F3F7FA',
+          secondary: '#F1FCFF',
         },
         gray: {
           DEFAULT: '#DFE5EC',

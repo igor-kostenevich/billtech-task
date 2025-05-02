@@ -1,4 +1,5 @@
 export interface Ticket {
+  id: string
   price: number
   carrier: string
   segments: [
