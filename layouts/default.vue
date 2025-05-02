@@ -1,7 +1,7 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div class="min-h-screen bg-secondary-dark">
-    qweqwe
+  <div class="h-auto max-w-[754px] mx-auto pt-[50px]">
+    <main>
+      <slot />
+    </main>
   </div>
 </template>

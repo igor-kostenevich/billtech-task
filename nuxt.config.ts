@@ -1,7 +1,12 @@
 export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', '@pinia/nuxt'],
   components: true,
-  ssr: true,
+  ssr: false,
+  runtimeConfig: {
+    public: {
+      baseURL: 'https://avs-backend.vercel.app'
+    }
+  },
   app: {
     head: {
       htmlAttrs: {
