@@ -9,13 +9,15 @@ onMounted(() => {
   fetchTickets()
 })
 
+const applyDebounced = debounce(() => {
+  const filtered = filterByStops(store.allTickets, store.selectedStops)
+  const sorted = sortBy(filtered, store.sortMode)
+  store.applyProcessed(sorted)
+}, 200)
+
 watch(
   [() => store.allTickets, () => store.selectedStops, () => store.sortMode],
-  () => {
-    const filtered = filterByStops(store.allTickets, store.selectedStops)
-    const sorted = sortBy(filtered, store.sortMode)
-    store.applyProcessed(sorted)
-  },
+  applyDebounced,
   { deep: true }
 )
 </script>
