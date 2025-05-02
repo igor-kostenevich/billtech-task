@@ -22,7 +22,7 @@ watch([() => store.selectedStops, () => store.sortMode], () => {
 <template>
   <section class="flex flex-col gap-4">
     <template v-if="store.loading">
-      <p class="text-center text-sm text-gray-400">Завантаження квитків...</p>
+      <TicketSkeleton v-for="i in 5" :key="i" />
     </template>
 
     <template v-else-if="store.error">

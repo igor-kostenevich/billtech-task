@@ -6,17 +6,19 @@ export const useFetchTickets = () => {
   const config = useRuntimeConfig()
   const API_URL = config.public.baseURL
 
+  // Fetches search ID required for ticket polling
   const fetchSearchId = async () => {
     const { searchId } = await $fetch<{ searchId: string }>(`${API_URL}/search`)
     store.searchId = searchId
   }
 
+  // Fetches all tickets in batches using long polling with retry logic
   const fetchAllTickets = async () => {
-    if (!store.searchId || store.isFinished) return
+    if (!store.searchId || store.isFinished || store.isFetchingMore) return
 
     let stop = false
-    store.isFetchingMore = true
     let consecutiveErrors = 0
+    store.isFetchingMore = true
 
     while (!stop) {
       try {
@@ -58,7 +60,9 @@ export const useFetchTickets = () => {
     store.isFetchingMore = false
   }
 
+  // Orchestrates the full ticket fetching process
   const fetchTickets = async () => {
+    if (store.loading) return
     store.reset()
     store.loading = true
 
@@ -74,6 +78,6 @@ export const useFetchTickets = () => {
 
   return {
     fetchTickets,
-    fetchAllTickets,
+    fetchAllTickets
   }
 }
