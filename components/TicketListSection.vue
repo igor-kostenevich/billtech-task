@@ -26,7 +26,7 @@ watch([() => store.selectedStops, () => store.sortMode], () => {
     </template>
 
     <template v-else-if="store.error">
-      <p class="text-center text-red-500 font-semibold">{{ store.error }}</p>
+      <p class="text-center text-sm text-red-500 font-semibold">{{ store.error }}</p>
     </template>
 
     <template v-else-if="!store.visibleTickets.length">

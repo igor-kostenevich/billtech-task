@@ -37,7 +37,7 @@ export const useFetchTickets = () => {
           await new Promise(r => setTimeout(r, 1000))
           continue
         } else {
-          store.error = 'Помилка завантаження квитків'
+          store.error = 'Помилка завантаження квитків. Будь ласка, спробуйте ще раз.'
           break
         }
       }

@@ -35,6 +35,14 @@ export const useTicketsStore = defineStore('tickets', {
       this.visibleCount += 5
     },
 
+    setStopsFilter(stops: number[]) {
+      this.selectedStops = stops
+    },
+
+    setSortMode(mode: SortOptions) {
+      this.sortMode = mode
+    },
+
     reset() {
       this.allTickets = []
       this.filteredTickets = []

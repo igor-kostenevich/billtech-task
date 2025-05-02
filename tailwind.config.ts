@@ -16,6 +16,9 @@ export default {
         },
         light: {
           DEFAULT: '#F3F7FA',
+        },
+        gray: {
+          DEFAULT: '#DFE5EC',
         }
       },
     },
