@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import type { Ticket } from '@/types/Interfaces'
+  import type { Ticket } from '@/types/tickets'
   const props = defineProps<{ ticket: Ticket }>()
 
   const { formatTimeRange, formatDuration, formatStops, formatPrice } = useHelpers()

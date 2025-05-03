@@ -1,5 +1,4 @@
-import type { Ticket } from '@/types/Interfaces'
-import type { SortOptions } from '@/types/Types'
+import type { Ticket, SortOptions } from '@/types/tickets'
 
 export const useTicketSort = () => {
   const totalDuration = (ticket: Ticket) => ticket.segments[0].duration + ticket.segments[1].duration

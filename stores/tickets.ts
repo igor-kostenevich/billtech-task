@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Ticket } from '@/types/Interfaces'
-import type { SortOptions } from '@/types/Types'
+import type { Ticket, SortOptions } from '@/types/tickets'
 
 export const useTicketsStore = defineStore('tickets', {
   state: () => ({
@@ -8,7 +7,7 @@ export const useTicketsStore = defineStore('tickets', {
     filteredTickets: [] as (Ticket & { id: string })[],
     visibleCount: 5,
     selectedStops: [] as number[],
-    sortMode: 'price' as SortOptions,
+    sortMode: 'cheap' as SortOptions,
     loading: false,
     isFinished: false,
     isFetchingMore: false,

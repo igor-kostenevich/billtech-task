@@ -1,4 +1,4 @@
-import type { Ticket } from '@/types/Interfaces'
+import type { Ticket } from '@/types/tickets'
 
 export const useTicketFilter = () => {
   const filterByStops = (tickets: Ticket[], selectedStops: number[]): Ticket[] => {

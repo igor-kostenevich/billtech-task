@@ -1,4 +1,4 @@
-import type { Ticket } from '@/types/Interfaces'
+import type { Ticket } from '@/types/tickets'
 import { useTicketsStore } from '@/stores/tickets'
 
 export const useFetchTickets = () => {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab } from '@headlessui/vue'
 import { useTicketsStore } from '@/stores/tickets'
-import type { SortOptions } from '@/types/Types'
+import type { SortOptions } from '@/types/tickets'
 
 const store = useTicketsStore()
 
