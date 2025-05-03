@@ -32,9 +32,13 @@ export default defineNuxtConfig({
   typescript: {
     strict: true,
   },
+  nitro: {
+    compressPublicAssets: true
+  },
   vite: {
     build: {
       target: 'esnext',
+      minify: 'terser',
     },
     logLevel: 'error',
   },

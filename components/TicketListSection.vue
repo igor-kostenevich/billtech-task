@@ -8,18 +8,6 @@ const { debounce } = useHelpers()
 onMounted(() => {
   fetchTickets()
 })
-
-const applyDebounced = debounce(() => {
-  const filtered = filterByStops(store.allTickets, store.selectedStops)
-  const sorted = sortBy(filtered, store.sortMode)
-  store.applyProcessed(sorted)
-}, 200)
-
-watch(
-  [() => store.allTickets, () => store.selectedStops, () => store.sortMode],
-  applyDebounced,
-  { deep: true }
-)
 </script>
 
 <template>
@@ -50,7 +38,7 @@ watch(
       </Transition>
 
       <button
-        v-if="store.visibleTickets.length < store.filteredTickets.length"
+        v-if="store.visibleTickets.length < store.filteredAndSortedTickets.length"
         class="bg-primary text-white px-5 py-[15px] rounded self-center uppercase text-xs font-semibold leading-5 w-full hover:bg-primary/80 transition-colors duration-300 outline-none ring-0"
         @click="store.showMore()"
       >

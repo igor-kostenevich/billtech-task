@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia'
 import type { Ticket, SortOptions } from '@/types/tickets'
+import { useTicketFilter } from '@/composables/useTicketFilter'
+import { useTicketSort } from '@/composables/useTicketSort'
 
 export const useTicketsStore = defineStore('tickets', {
   state: () => ({
     allTickets: [] as (Ticket & { id: string })[],
-    filteredTickets: [] as (Ticket & { id: string })[],
     visibleCount: 5,
     selectedStops: [] as number[],
     sortMode: 'cheap' as SortOptions,
@@ -14,20 +15,36 @@ export const useTicketsStore = defineStore('tickets', {
     error: null as string | null,
     totalLoaded: 0,
     searchId: '',
+    sortedFilteredCache: [] as Ticket[],
+    lastCacheKey: '',
   }),
 
   getters: {
-    visibleTickets: (state) =>
-      state.filteredTickets.slice(0, state.visibleCount),
+    filteredAndSortedTickets(state): Ticket[] {
+      const { filterByStops } = useTicketFilter()
+      const { sortBy } = useTicketSort()
+
+      const key = `${state.selectedStops.join(',')}-${state.sortMode}-${state.allTickets.length}`
+
+      if (key === state.lastCacheKey) return state.sortedFilteredCache
+
+      const filtered = filterByStops(state.allTickets, state.selectedStops)
+      const sorted = sortBy(filtered, state.sortMode)
+
+      state.lastCacheKey = key
+      state.sortedFilteredCache = sorted
+      return sorted
+    },
+
+    visibleTickets(): Ticket[] {
+      return this.filteredAndSortedTickets.slice(0, this.visibleCount)
+    },
   },
 
   actions: {
     addTickets(tickets: (Ticket & { id: string })[]) {
       this.allTickets.push(...tickets)
-    },
-
-    applyProcessed(tickets: (Ticket & { id: string })[]) {
-      this.filteredTickets = tickets
+      this.lastCacheKey = ''
     },
 
     showMore() {
@@ -36,15 +53,16 @@ export const useTicketsStore = defineStore('tickets', {
 
     setStopsFilter(stops: number[]) {
       this.selectedStops = stops
+      this.lastCacheKey = ''
     },
 
     setSortMode(mode: SortOptions) {
       this.sortMode = mode
+      this.lastCacheKey = ''
     },
 
     reset() {
       this.allTickets = []
-      this.filteredTickets = []
       this.visibleCount = 5
       this.selectedStops = []
       this.sortMode = 'cheap'
@@ -54,6 +72,8 @@ export const useTicketsStore = defineStore('tickets', {
       this.totalLoaded = 0
       this.searchId = ''
       this.isFetchingMore = false
+      this.sortedFilteredCache = []
+      this.lastCacheKey = ''
     }
   }
 })
