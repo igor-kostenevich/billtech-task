@@ -35,9 +35,6 @@ export default defineNuxtConfig({
   nitro: {
     compressPublicAssets: true,
   },
-  devServer: {
-    port: 3002,
-  },
   vite: {
     build: {
       target: 'esnext',
