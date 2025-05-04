@@ -21,12 +21,9 @@ export const useHelpers = () => {
 
   const formatStops = (stops: string[]): [string, string] => {
     const count = stops.length
-    if (count === 0) return ['БЕЗ ПЕРЕСАДОК', '']
-
-    let label = ''
-    if (count === 1) label = '1 пересадка'
-    else if (count === 2) label = '2 пересадки'
-    else label = `${count} пересадок`
+    const label = count === 0 ? 'БЕЗ ПЕРЕСАДОК'
+                    : count === 1 ? '1 пересадка'
+                    : `${count} пересадки`
 
     return [label, stops.join(', ')]
   }

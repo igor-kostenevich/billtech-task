@@ -1,10 +1,25 @@
 import type { Ticket } from '@/types/tickets'
 import { useTicketsStore } from '@/stores/tickets'
+import { useHelpers } from '@/composables/useHelpers'
 
 export const useFetchTickets = () => {
   const store = useTicketsStore()
   const config = useRuntimeConfig()
   const API_URL = config.public.baseURL
+  const { debounce } = useHelpers()
+  const bufferedTickets: Ticket[] = []
+  let bufferResolver: (() => void) | null = null
+
+  // Debounced function to flush buffered tickets to the store
+  const flushBufferedTickets = debounce(() => {
+    if (bufferedTickets.length) {
+      store.addTickets([...bufferedTickets])
+      bufferedTickets.length = 0
+    }
+
+    if (bufferResolver) bufferResolver()
+    store.isBuffering = false
+  }, 1000)
 
   // Fetches search ID required for ticket polling
   const fetchSearchId = async () => {
@@ -32,7 +47,10 @@ export const useFetchTickets = () => {
           id: crypto.randomUUID(),
         }))
 
-        store.addTickets(tickets)
+        bufferedTickets.push(...tickets)
+        store.isBuffering = true
+        flushBufferedTickets()
+
         store.totalLoaded += tickets.length
 
         stop = res.stop
@@ -51,13 +69,22 @@ export const useFetchTickets = () => {
           continue
         }
 
-        store.error = 'Невідома помилка при завантаженні квитків.'
+        store.error = 'Помилка при завантаженні квитків.'
         break
       }
     }
 
     store.isFinished = true
     store.isFetchingMore = false
+
+    flushBufferedTickets()
+  }
+
+  const waitForBufferFlush = () => {
+    if (!store.isBuffering) return Promise.resolve()
+    return new Promise<void>(resolve => {
+      bufferResolver = resolve
+    })
   }
 
   // Orchestrates the full ticket fetching process
@@ -69,6 +96,7 @@ export const useFetchTickets = () => {
     try {
       await fetchSearchId()
       await fetchAllTickets()
+      await waitForBufferFlush()
     } catch (e) {
       store.error = 'Не вдалося отримати searchId'
     } finally {

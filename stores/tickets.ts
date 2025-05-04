@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
-import type { Ticket, SortOptions } from '@/types/tickets'
+import type { Ticket, SortMode } from '@/types/tickets'
 import { useTicketFilter } from '@/composables/useTicketFilter'
 import { useTicketSort } from '@/composables/useTicketSort'
 
 export const useTicketsStore = defineStore('tickets', {
   state: () => ({
-    allTickets: [] as (Ticket & { id: string })[],
+    allTickets: [] as Ticket[],
     visibleCount: 5,
     selectedStops: [] as number[],
-    sortMode: 'cheap' as SortOptions,
+    sortMode: 'cheap' as SortMode,
     loading: false,
+    isBuffering: false,
     isFinished: false,
     isFetchingMore: false,
     error: null as string | null,
@@ -42,7 +43,7 @@ export const useTicketsStore = defineStore('tickets', {
   },
 
   actions: {
-    addTickets(tickets: (Ticket & { id: string })[]) {
+    addTickets(tickets: Ticket[]) {
       this.allTickets.push(...tickets)
       this.lastCacheKey = ''
     },
@@ -56,24 +57,26 @@ export const useTicketsStore = defineStore('tickets', {
       this.lastCacheKey = ''
     },
 
-    setSortMode(mode: SortOptions) {
+    setSortMode(mode: SortMode) {
       this.sortMode = mode
       this.lastCacheKey = ''
     },
 
     reset() {
-      this.allTickets = []
-      this.visibleCount = 5
-      this.selectedStops = []
-      this.sortMode = 'cheap'
-      this.loading = false
-      this.error = null
-      this.isFinished = false
-      this.totalLoaded = 0
-      this.searchId = ''
-      this.isFetchingMore = false
-      this.sortedFilteredCache = []
-      this.lastCacheKey = ''
-    }
+      Object.assign(this, {
+        allTickets: [],
+        visibleCount: 5,
+        selectedStops: [],
+        sortMode: 'cheap',
+        loading: false,
+        error: null,
+        isFinished: false,
+        totalLoaded: 0,
+        searchId: '',
+        isFetchingMore: false,
+        sortedFilteredCache: [],
+        lastCacheKey: '',
+      })
+    },    
   }
 })

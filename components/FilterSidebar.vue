@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { useTicketsStore } from '@/stores/tickets'
 
 const store = useTicketsStore()
-
+const selected = ref<number[]>([])
 const options: { label: string; value: number | 'all' }[] = [
   { label: 'Всі', value: 'all' },
   { label: 'Без пересадок', value: 0 },
@@ -12,17 +11,17 @@ const options: { label: string; value: number | 'all' }[] = [
   { label: '3 пересадки', value: 3 },
 ]
 
-const selected = ref<number[]>([])
 
 const toggleOption = (optValue: number | 'all', checked: boolean) => {
   if (optValue === 'all') {
     selected.value = checked ? [0, 1, 2, 3] : []
-  } else {
-    const val = optValue as number
-    selected.value = checked
-      ? [...selected.value, val]
-      : selected.value.filter(v => v !== val)
+    return
   }
+
+  const val = optValue as number
+  const current = new Set(selected.value)
+  checked ? current.add(val) : current.delete(val)
+  selected.value = [...current]
 }
 
 watch(selected, (newVal) => {

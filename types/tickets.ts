@@ -13,4 +13,4 @@ export interface Ticket {
   segments: [Segment, Segment]
 }
 
-export type SortOptions = 'cheap' | 'fast' | 'optimal'
+export type SortMode = 'cheap' | 'fast' | 'optimal'

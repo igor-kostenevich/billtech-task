@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import { TabGroup, TabList, Tab } from '@headlessui/vue'
 import { useTicketsStore } from '@/stores/tickets'
-import type { SortOptions } from '@/types/tickets'
+import type { SortMode } from '@/types/tickets'
 
 const store = useTicketsStore()
 
-const tabs: { label: string; value: SortOptions }[] = [
+const tabs: { label: string; value: SortMode }[] = [
   { label: 'Найдешевші', value: 'cheap' },
   { label: 'Найшвидші', value: 'fast' },
   { label: 'Оптимальні', value: 'optimal' }
 ]
 
-const selectedIndex = computed(() =>
-  tabs.findIndex(tab => tab.value === store.sortMode)
-)
+const selectedIndex = computed(() => tabs.findIndex(tab => tab.value === store.sortMode))
 
 const updateSort = (index: number) => {
   store.setSortMode(tabs[index].value)

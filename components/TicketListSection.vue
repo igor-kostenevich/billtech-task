@@ -1,9 +1,6 @@
 <script setup lang="ts">
 const store = useTicketsStore()
 const { fetchTickets } = useFetchTickets()
-const { filterByStops } = useTicketFilter()
-const { sortBy } = useTicketSort()
-const { debounce } = useHelpers()
 
 onMounted(() => {
   fetchTickets()
