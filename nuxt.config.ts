@@ -9,8 +9,12 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      title: 'BillTech test task',
+      meta: [
+        { name: 'description', content: 'BillTech test task' }
+      ],
       htmlAttrs: {
-        lang: 'en',
+        lang: 'uk',
       },
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
