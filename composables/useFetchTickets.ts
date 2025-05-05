@@ -11,21 +11,27 @@ export const useFetchTickets = () => {
   let bufferResolver: (() => void) | null = null
   let isBuffering = false
 
-  // Flush tickets to the store
+  // Function to flush buffered tickets to the store
   const flushBufferedTickets = () => {
-    if (bufferedTickets.length) {
-      store.addTickets([...bufferedTickets])
-      bufferedTickets.length = 0
+    if (!bufferedTickets.length) return
+
+    const ticketsToAdd = bufferedTickets.splice(0, bufferedTickets.length)
+
+    const addToStore = () => {
+      store.addTickets(ticketsToAdd)
+      bufferResolver?.()
+      bufferResolver = null
+      isBuffering = false
     }
 
-    if (bufferResolver) bufferResolver()
-    isBuffering = false
+    if (import.meta.client && typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(addToStore)
+    } else {
+      setTimeout(addToStore, 0)
+    }
   }
 
-  // Debounced function to flush tickets
-  const debouncedFlush = debounce(() => {
-    flushBufferedTickets()
-  }, 1000)
+  const debouncedFlush = debounce(flushBufferedTickets, 1000)
 
   // Fetches search ID required for ticket polling
   const fetchSearchId = async () => {
