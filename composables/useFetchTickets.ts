@@ -14,21 +14,11 @@ export const useFetchTickets = () => {
   // Function to flush buffered tickets to the store
   const flushBufferedTickets = () => {
     if (!bufferedTickets.length) return
-
-    const ticketsToAdd = bufferedTickets.splice(0, bufferedTickets.length)
-
-    const addToStore = () => {
-      store.addTickets(ticketsToAdd)
-      bufferResolver?.()
-      bufferResolver = null
-      isBuffering = false
-    }
-
-    if (import.meta.client && typeof window.requestIdleCallback === 'function') {
-      window.requestIdleCallback(addToStore)
-    } else {
-      setTimeout(addToStore, 0)
-    }
+    store.addTickets([...bufferedTickets])
+    bufferedTickets.length = 0
+    bufferResolver?.()
+    bufferResolver = null
+    isBuffering = false
   }
 
   const debouncedFlush = debounce(flushBufferedTickets, 1000)
