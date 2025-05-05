@@ -106,6 +106,5 @@ export const useFetchTickets = () => {
 
   return {
     fetchTickets,
-    fetchAllTickets
   }
 }

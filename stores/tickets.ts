@@ -21,6 +21,7 @@ export const useTicketsStore = defineStore('tickets', {
   }),
 
   getters: {
+    // Returns filtered and sorted tickets based on selected stops and sort mode
     filteredAndSortedTickets(state): Ticket[] {
       const { filterByStops } = useTicketFilter()
       const { sortBy } = useTicketSort()
@@ -77,6 +78,6 @@ export const useTicketsStore = defineStore('tickets', {
         sortedFilteredCache: [],
         lastCacheKey: '',
       })
-    },    
+    },
   }
 })

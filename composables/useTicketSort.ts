@@ -6,7 +6,7 @@ export const useTicketSort = () => {
   const sortStrategies: Record<SortMode, (a: Ticket, b: Ticket) => number> = {
     cheap: (a, b) => a.price - b.price,
     fast: (a, b) => totalDuration(a) - totalDuration(b),
-    optimal: (a, b) => a.price + totalDuration(a) - (b.price + totalDuration(b))
+    optimal: (a, b) => (a.price + totalDuration(a)) - (b.price + totalDuration(b))
   }
 
   const sortBy = (tickets: Ticket[], mode: SortMode): Ticket[] => {

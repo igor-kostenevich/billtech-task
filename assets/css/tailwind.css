@@ -8,7 +8,7 @@ body {
 
 @layer components {
   .tab-button {
-    @apply flex-1 text-xs font-semibold p-[15px] leading-5 tracking-wider transition-colors duration-200 uppercase
+    @apply flex-1 text-[10px] sm:text-xs font-semibold p-2 sm:p-[15px] leading-5 tracking-wider transition-colors duration-200 uppercase
       text-secondary bg-white border border-gray
       aria-selected:bg-primary aria-selected:text-white aria-selected:border-primary;
   }
