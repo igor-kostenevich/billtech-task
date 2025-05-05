@@ -9,16 +9,22 @@ export const useFetchTickets = () => {
   const { debounce } = useHelpers()
   const bufferedTickets: Ticket[] = []
   let bufferResolver: (() => void) | null = null
+  let isBuffering = false
 
-  // Debounced function to flush buffered tickets to the store
-  const flushBufferedTickets = debounce(() => {
+  // Flush tickets to the store
+  const flushBufferedTickets = () => {
     if (bufferedTickets.length) {
       store.addTickets([...bufferedTickets])
       bufferedTickets.length = 0
     }
 
     if (bufferResolver) bufferResolver()
-    store.isBuffering = false
+    isBuffering = false
+  }
+
+  // Debounced function to flush tickets
+  const debouncedFlush = debounce(() => {
+    flushBufferedTickets()
   }, 1000)
 
   // Fetches search ID required for ticket polling
@@ -48,11 +54,15 @@ export const useFetchTickets = () => {
         }))
 
         bufferedTickets.push(...tickets)
-        store.isBuffering = true
-        flushBufferedTickets()
+        isBuffering = true
+
+        if (store.totalLoaded === 0) {
+          flushBufferedTickets()
+        } else {
+          debouncedFlush()
+        }
 
         store.totalLoaded += tickets.length
-
         stop = res.stop
         consecutiveErrors = 0
       } catch (err: any) {
@@ -81,13 +91,13 @@ export const useFetchTickets = () => {
   }
 
   const waitForBufferFlush = () => {
-    if (!store.isBuffering) return Promise.resolve()
+    if (!isBuffering) return Promise.resolve()
     return new Promise<void>(resolve => {
       bufferResolver = resolve
     })
   }
 
-  // Orchestrates the full ticket fetching process
+  // Fetch tickets function that handles loading
   const fetchTickets = async () => {
     if (store.loading) return
     store.reset()

@@ -10,14 +10,12 @@ export const useTicketsStore = defineStore('tickets', {
     selectedStops: [] as number[],
     sortMode: 'cheap' as SortMode,
     loading: false,
-    isBuffering: false,
     isFinished: false,
     isFetchingMore: false,
     error: null as string | null,
     totalLoaded: 0,
     searchId: '',
-    sortedFilteredCache: [] as Ticket[],
-    lastCacheKey: '',
+    cache: {} as Record<string, Ticket[]>,
   }),
 
   getters: {
@@ -26,15 +24,15 @@ export const useTicketsStore = defineStore('tickets', {
       const { filterByStops } = useTicketFilter()
       const { sortBy } = useTicketSort()
 
-      const key = `${state.selectedStops.join(',')}-${state.sortMode}-${state.allTickets.length}`
+      const stopsKey = state.selectedStops.slice().sort().join('-') || 'all'
+      const cacheKey = `${state.sortMode}-${stopsKey}`
 
-      if (key === state.lastCacheKey) return state.sortedFilteredCache
+      if (state.cache[cacheKey]) return state.cache[cacheKey]
 
       const filtered = filterByStops(state.allTickets, state.selectedStops)
       const sorted = sortBy(filtered, state.sortMode)
 
-      state.lastCacheKey = key
-      state.sortedFilteredCache = sorted
+      state.cache[cacheKey] = sorted
       return sorted
     },
 
@@ -46,7 +44,7 @@ export const useTicketsStore = defineStore('tickets', {
   actions: {
     addTickets(tickets: Ticket[]) {
       this.allTickets.push(...tickets)
-      this.lastCacheKey = ''
+      this.cache = {}
     },
 
     showMore() {
@@ -55,12 +53,10 @@ export const useTicketsStore = defineStore('tickets', {
 
     setStopsFilter(stops: number[]) {
       this.selectedStops = stops
-      this.lastCacheKey = ''
     },
 
     setSortMode(mode: SortMode) {
       this.sortMode = mode
-      this.lastCacheKey = ''
     },
 
     reset() {
@@ -75,8 +71,7 @@ export const useTicketsStore = defineStore('tickets', {
         totalLoaded: 0,
         searchId: '',
         isFetchingMore: false,
-        sortedFilteredCache: [],
-        lastCacheKey: '',
+        cache: {},
       })
     },
   }
